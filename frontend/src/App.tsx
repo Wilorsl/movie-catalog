@@ -1,6 +1,6 @@
 import './App.css'
 
-const appTitle: string = 'КиноКаталог'
+const appTitle: string = 'Кинокаталог'
 
 export default function App() {
   return (

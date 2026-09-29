@@ -10,4 +10,4 @@
 4. `npm run preview` показывает готовую сборку.
 5. Чистая копия из GitHub запускается по README.
 
-Коммит: (вставьте вывод `git log -1 --oneline`)
+Коммит: 9e38d7b (HEAD -> main, origin/main) Lab 1: create React TypeScript app
