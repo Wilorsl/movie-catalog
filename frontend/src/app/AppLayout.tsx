@@ -20,7 +20,10 @@ export function AppLayout() {
       <main className="main-content">
         <Outlet />
       </main>
-      <footer className="site-footer">Ваша личная коллекция историй</footer>
+      <footer className="site-footer">
+        Ваша личная коллекция историй · Изменения хранятся только до обновления
+        страницы
+      </footer>
     </div>
   )
 }

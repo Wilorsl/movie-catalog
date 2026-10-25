@@ -12,3 +12,5 @@ export type MediaItem = {
   rating: number | null
   isFavorite: boolean
 }
+
+export type MediaDraft = Omit<MediaItem, 'id'>

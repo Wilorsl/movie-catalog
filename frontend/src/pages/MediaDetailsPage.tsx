@@ -1,10 +1,16 @@
-import { Link, useParams } from 'react-router'
-import { mediaItems } from '../data/media'
+import { Link, useNavigate, useParams } from 'react-router'
+import type { MediaItem } from '../types/media'
 import { mediaKindLabels, watchStatusLabels } from '../utils/mediaLabels'
 
-export function MediaDetailsPage() {
+type MediaDetailsPageProps = {
+  items: MediaItem[]
+  onDelete: (id: string) => void
+}
+
+export function MediaDetailsPage({ items, onDelete }: MediaDetailsPageProps) {
   const { id } = useParams()
-  const item = mediaItems.find((mediaItem) => mediaItem.id === id)
+  const navigate = useNavigate()
+  const item = items.find((mediaItem) => mediaItem.id === id)
 
   if (!item) {
     return (
@@ -51,6 +57,23 @@ export function MediaDetailsPage() {
       <Link className="text-link" to="/movies">
         Вернуться к каталогу
       </Link>
+      <div className="details-actions">
+        <Link className="button-link" to={`/movies/${item.id}/edit`}>
+          Редактировать
+        </Link>
+        <button
+          className="danger-button"
+          type="button"
+          onClick={() => {
+            if (window.confirm(`Удалить запись «${item.title}»?`)) {
+              onDelete(item.id)
+              navigate('/movies', { replace: true })
+            }
+          }}
+        >
+          Удалить
+        </button>
+      </div>
     </article>
   )
 }
