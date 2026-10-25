@@ -1,0 +1,7 @@
+[
+  { "id": "science-fiction-drama", "name": "Фантастика и драма" },
+  { "id": "crime-drama", "name": "Криминальная драма" },
+  { "id": "thriller-drama", "name": "Триллер и драма" },
+  { "id": "drama", "name": "Драма" },
+  { "id": "detective-drama", "name": "Детективная драма" }
+]

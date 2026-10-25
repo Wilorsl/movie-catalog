@@ -7,7 +7,7 @@ export const mediaItems: MediaItem[] = [
     description:
       'Команда исследователей отправляется за пределы Солнечной системы, чтобы найти человечеству новый дом.',
     kind: 'movie',
-    genre: 'Фантастика, драма',
+    genre: 'science-fiction-drama',
     releaseYear: 2014,
     status: 'watched',
     rating: 10,
@@ -19,7 +19,7 @@ export const mediaItems: MediaItem[] = [
     description:
       'Адвокат Джимми Макгилл строит карьеру и постепенно превращается в Сола Гудмана.',
     kind: 'series',
-    genre: 'Драма, криминал',
+    genre: 'crime-drama',
     releaseYear: 2015,
     status: 'watched',
     rating: 10,
@@ -31,7 +31,7 @@ export const mediaItems: MediaItem[] = [
     description:
       'История о бывших революционерах, которых вновь затягивает опасное противостояние.',
     kind: 'movie',
-    genre: 'Триллер, драма',
+    genre: 'thriller-drama',
     releaseYear: 2025,
     status: 'planned',
     rating: null,
@@ -43,7 +43,7 @@ export const mediaItems: MediaItem[] = [
     description:
       'Семья Рой борется за влияние и контроль над крупной медиакомпанией.',
     kind: 'series',
-    genre: 'Драма',
+    genre: 'drama',
     releaseYear: 2018,
     status: 'watching',
     rating: null,
@@ -55,7 +55,7 @@ export const mediaItems: MediaItem[] = [
     description:
       'Консультант Патрик Джейн помогает расследовать преступления, полагаясь на наблюдательность и дедукцию.',
     kind: 'series',
-    genre: 'Детектив, драма',
+    genre: 'detective-drama',
     releaseYear: 2008,
     status: 'planned',
     rating: null,

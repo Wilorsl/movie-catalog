@@ -1,13 +1,19 @@
 import { Link, useNavigate, useParams } from 'react-router'
+import type { Genre } from '../types/genre'
 import type { MediaItem } from '../types/media'
 import { mediaKindLabels, watchStatusLabels } from '../utils/mediaLabels'
 
 type MediaDetailsPageProps = {
   items: MediaItem[]
+  genres: Genre[]
   onDelete: (id: string) => void
 }
 
-export function MediaDetailsPage({ items, onDelete }: MediaDetailsPageProps) {
+export function MediaDetailsPage({
+  items,
+  genres,
+  onDelete,
+}: MediaDetailsPageProps) {
   const { id } = useParams()
   const navigate = useNavigate()
   const item = items.find((mediaItem) => mediaItem.id === id)
@@ -25,6 +31,10 @@ export function MediaDetailsPage({ items, onDelete }: MediaDetailsPageProps) {
     )
   }
 
+  const genreName =
+    genres.find((genre) => genre.id === item.genre)?.name ??
+    `Неизвестный жанр (${item.genre})`
+
   return (
     <article className="details-page">
       <p className="eyebrow">
@@ -36,7 +46,7 @@ export function MediaDetailsPage({ items, onDelete }: MediaDetailsPageProps) {
       <dl className="details-list">
         <div>
           <dt>Жанр</dt>
-          <dd>{item.genre}</dd>
+          <dd>{genreName}</dd>
         </div>
         <div>
           <dt>Статус просмотра</dt>

@@ -1,13 +1,21 @@
 import { Link, useNavigate, useParams } from 'react-router'
 import { MediaForm } from '../components/MediaForm'
+import type { GenresLoad } from '../hooks/useGenres'
 import type { MediaDraft, MediaItem } from '../types/media'
 
 type EditMediaPageProps = {
   items: MediaItem[]
+  genreLoad: GenresLoad
+  retryGenres: () => void
   onUpdate: (id: string, draft: MediaDraft) => void
 }
 
-export function EditMediaPage({ items, onUpdate }: EditMediaPageProps) {
+export function EditMediaPage({
+  items,
+  genreLoad,
+  retryGenres,
+  onUpdate,
+}: EditMediaPageProps) {
   const { id } = useParams()
   const navigate = useNavigate()
   const item = items.find((mediaItem) => mediaItem.id === id)
@@ -43,6 +51,8 @@ export function EditMediaPage({ items, onUpdate }: EditMediaPageProps) {
       <MediaForm
         key={item.id}
         initialValues={initialValues}
+        genreLoad={genreLoad}
+        retryGenres={retryGenres}
         onSave={(draft) => {
           onUpdate(item.id, draft)
           navigate(`/movies/${item.id}`)

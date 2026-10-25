@@ -1,9 +1,12 @@
 import { useNavigate } from 'react-router'
 import { MediaForm } from '../components/MediaForm'
+import type { GenresLoad } from '../hooks/useGenres'
 import type { MediaDraft } from '../types/media'
 
 type NewMediaPageProps = {
   onCreate: (draft: MediaDraft) => string
+  genreLoad: GenresLoad
+  retryGenres: () => void
 }
 
 const emptyMedia: MediaDraft = {
@@ -17,7 +20,11 @@ const emptyMedia: MediaDraft = {
   isFavorite: false,
 }
 
-export function NewMediaPage({ onCreate }: NewMediaPageProps) {
+export function NewMediaPage({
+  onCreate,
+  genreLoad,
+  retryGenres,
+}: NewMediaPageProps) {
   const navigate = useNavigate()
 
   function handleSave(draft: MediaDraft) {
@@ -31,6 +38,8 @@ export function NewMediaPage({ onCreate }: NewMediaPageProps) {
       <h1>Добавление записи</h1>
       <MediaForm
         initialValues={emptyMedia}
+        genreLoad={genreLoad}
+        retryGenres={retryGenres}
         onSave={handleSave}
         onCancel={() => navigate('/movies')}
       />

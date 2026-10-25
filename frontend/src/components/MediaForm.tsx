@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import type { GenresLoad } from '../hooks/useGenres'
 import type { MediaDraft } from '../types/media'
 import { mediaKindLabels, watchStatusLabels } from '../utils/mediaLabels'
 
@@ -10,20 +11,36 @@ type MediaFormValues = Omit<MediaDraft, 'rating' | 'releaseYear'> & {
 
 type MediaFormProps = {
   initialValues: MediaDraft
+  genreLoad: GenresLoad
+  retryGenres: () => void
   onSave: (draft: MediaDraft) => void
   onCancel: () => void
 }
 
-export function MediaForm({ initialValues, onSave, onCancel }: MediaFormProps) {
+export function MediaForm({
+  initialValues,
+  genreLoad,
+  retryGenres,
+  onSave,
+  onCancel,
+}: MediaFormProps) {
   const [draft, setDraft] = useState<MediaFormValues>(() => ({
     ...initialValues,
     rating: initialValues.rating === null ? '' : String(initialValues.rating),
     releaseYear: String(initialValues.releaseYear),
   }))
   const [error, setError] = useState('')
+  const genres = genreLoad.status === 'success' ? genreLoad.data : []
+  const selectedGenreExists = genres.some((genre) => genre.id === draft.genre)
+  const canSave = genreLoad.status === 'success' && selectedGenreExists
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+
+    if (!canSave) {
+      setError('Дождитесь справочника и выберите доступный жанр.')
+      return
+    }
 
     const title = draft.title.trim()
     const description = draft.description.trim()
@@ -115,14 +132,34 @@ export function MediaForm({ initialValues, onSave, onCancel }: MediaFormProps) {
         </div>
         <div className="form-field">
           <label htmlFor="media-genre">Жанр</label>
-          <input
+          <select
             id="media-genre"
             value={draft.genre}
             required
+            disabled={genreLoad.status !== 'success' || genres.length === 0}
+            aria-describedby={
+              genreLoad.status === 'success' &&
+              draft.genre !== '' &&
+              !selectedGenreExists
+                ? 'media-genre-unavailable'
+                : undefined
+            }
             onChange={(event) =>
               setDraft((current) => ({ ...current, genre: event.target.value }))
             }
-          />
+          >
+            <option value="">Выберите жанр</option>
+            {draft.genre !== '' && !selectedGenreExists && (
+              <option value={draft.genre} disabled>
+                Текущий код: {draft.genre} — выберите доступный жанр
+              </option>
+            )}
+            {genres.map((genre) => (
+              <option key={genre.id} value={genre.id}>
+                {genre.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="form-field">
           <label htmlFor="media-release-year">Год выпуска</label>
@@ -168,6 +205,40 @@ export function MediaForm({ initialValues, onSave, onCancel }: MediaFormProps) {
           />
         </div>
       </div>
+      {genreLoad.status === 'loading' && (
+        <p role="status">Загружаем жанры…</p>
+      )}
+      {genreLoad.status === 'error' && (
+        <div>
+          <p role="alert">{genreLoad.message}</p>
+          <button
+            className="secondary-button"
+            type="button"
+            onClick={retryGenres}
+          >
+            Повторить
+          </button>
+        </div>
+      )}
+      {genreLoad.status === 'success' && genres.length === 0 && (
+        <div>
+          <p role="status">Жанров пока нет. Сохранение недоступно.</p>
+          <button
+            className="secondary-button"
+            type="button"
+            onClick={retryGenres}
+          >
+            Повторить
+          </button>
+        </div>
+      )}
+      {genreLoad.status === 'success' &&
+        draft.genre !== '' &&
+        !selectedGenreExists && (
+          <p id="media-genre-unavailable" role="status">
+            Сохранённый жанр отсутствует в справочнике. Выберите доступный вариант.
+          </p>
+        )}
       <label className="checkbox-field" htmlFor="media-favorite">
         <input
           id="media-favorite"
@@ -188,7 +259,7 @@ export function MediaForm({ initialValues, onSave, onCancel }: MediaFormProps) {
         </p>
       )}
       <div className="form-actions">
-        <button className="button-link" type="submit">
+        <button className="button-link" type="submit" disabled={!canSave}>
           Сохранить
         </button>
         <button className="secondary-button" type="button" onClick={onCancel}>

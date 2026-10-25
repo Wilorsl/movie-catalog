@@ -1,12 +1,18 @@
 import { Link } from 'react-router'
+import type { Genre } from '../types/genre'
 import type { MediaItem } from '../types/media'
 import { mediaKindLabels, watchStatusLabels } from '../utils/mediaLabels'
 
 type MediaCardProps = {
   item: MediaItem
+  genres: Genre[]
 }
 
-export function MediaCard({ item }: MediaCardProps) {
+export function MediaCard({ item, genres }: MediaCardProps) {
+  const genreName =
+    genres.find((genre) => genre.id === item.genre)?.name ??
+    `Неизвестный жанр (${item.genre})`
+
   return (
     <article className="media-card">
       <div className="media-card__topline">
@@ -18,7 +24,7 @@ export function MediaCard({ item }: MediaCardProps) {
       </h2>
       <p className="media-card__description">{item.description}</p>
       <p className="media-card__meta">
-        {item.genre} · {item.releaseYear}
+        {genreName} · {item.releaseYear}
       </p>
       <div className="media-card__footer">
         <span className={`status status--${item.status}`}>

@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { MediaCard } from '../components/MediaCard'
+import type { Genre } from '../types/genre'
 import type { MediaItem, WatchStatus } from '../types/media'
 import { watchStatusLabels } from '../utils/mediaLabels'
 
 type MediaPageProps = {
   items: MediaItem[]
+  genres: Genre[]
 }
 
-export function MediaPage({ items }: MediaPageProps) {
+export function MediaPage({ items, genres }: MediaPageProps) {
   const [status, setStatus] = useState<WatchStatus | 'all'>('all')
   const visibleItems = items.filter(
     (item) => status === 'all' || item.status === status,
@@ -59,6 +61,9 @@ export function MediaPage({ items }: MediaPageProps) {
           Сбросить фильтр
         </button>
       </div>
+      <p className="media-filter__hint">
+        Названия жанров загружаются из справочника.
+      </p>
 
       {items.length === 0 ? (
         <p className="empty-state">В каталоге пока нет фильмов и сериалов.</p>
@@ -69,7 +74,7 @@ export function MediaPage({ items }: MediaPageProps) {
       ) : (
         <div className="media-list">
           {visibleItems.map((item) => (
-            <MediaCard key={item.id} item={item} />
+            <MediaCard key={item.id} item={item} genres={genres} />
           ))}
         </div>
       )}
